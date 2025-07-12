@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/frontend/Components/ui/button';
 import { Badge } from '@/frontend/Components/ui/badge';
 
@@ -14,8 +15,19 @@ interface SkillProfile {
 }
 
 export function SkillCard({ profile }: { profile: SkillProfile }) {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    // Convert name to URL-friendly format for the ID
+    const profileId = profile.name.toLowerCase().replace(/\s+/g, '-');
+    router.push(`/profile/${profileId}`);
+  };
+
   return (
-    <div className="p-6 rounded-xl bg-card border border-border hover:shadow-lg transition-all duration-300">
+    <div 
+      className="p-6 rounded-xl bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="flex items-start gap-4">
         <div className="relative h-16 w-16 rounded-full overflow-hidden">
           <Image
@@ -59,7 +71,14 @@ export function SkillCard({ profile }: { profile: SkillProfile }) {
             <span className="text-lg font-semibold">{profile.rating}</span>
             <span className="text-sm text-muted-foreground">/5</span>
           </div>
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button 
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Handle request logic here
+              alert('Request sent!');
+            }}
+          >
             Request
           </Button>
         </div>

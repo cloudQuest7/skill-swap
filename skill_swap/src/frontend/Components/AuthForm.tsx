@@ -7,7 +7,7 @@ import { Input } from './ui/input';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Link, Loader2 } from 'lucide-react';
-import { start } from 'repl';
+import { loginAction, signUpAction } from '@/lib/actions/auth-actions';
 
 type Props = {
   type: 'login' | 'signup';
@@ -22,37 +22,33 @@ function AuthForm({type}:Props) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-       startTransition(async () => {
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-        let errorMessage;
-        let title;
-        let description;
-        if (isLoginForm) {
-          errorMessage = (await loginAction(email, password)).errorMessage;
-          title = "Logged in";
-            description = "You have successfully logged in.";
-        } else {
-          errorMessage = (await signUpAction(email, password)).errorMessage;
-          title = "Signed up";
-          description = "Check your Email for Comfirmation link.";
-        }
+        
+        startTransition(async () => {
+          try {
+            const email = formData.get('email') as string;
+            const password = formData.get('password') as string;
+            
+            const response = isLoginForm 
+              ? await loginAction(email, password)
+              : await signUpAction(email, password);
 
-        if (errorMessage) {
-          toast({
-            title: "Action Failed",
-            description: errorMessage,
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title,
-            description,
-            variant: "success",
-          });
-          router.push("/");
-        }
-       });
+            if (response.errorMessage) {
+              toast.error(response.errorMessage);
+              return;
+            }
+
+            if (response.success) {
+              if (isLoginForm) {
+                toast.success("Welcome back! Successfully logged in.");
+              } else {
+                toast.success("Account created! Please check your email for confirmation.");
+              }
+              router.push("/");
+            }
+          } catch (error) {
+            toast.error("An unexpected error occurred. Please try again.");
+          }
+        });
     };
   return (
     <form onSubmit={handleSubmit}>
@@ -70,14 +66,15 @@ function AuthForm({type}:Props) {
             </div>
 
             <div className='flex flex-col space-y-1.5'>
-                <Label htmlFor='email'>Password</Label>
+                <Label htmlFor='password'>Password</Label>
                 <Input
                 id="password"
                 name='password'
-                placeholder="Enter your email"
+                placeholder="Enter your password"
                 type='password'
                 required
                 disabled={isPending}
+                minLength={8}
                 />
             </div>
         </CardContent>
