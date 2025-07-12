@@ -44,10 +44,11 @@ function AuthForm({type}:Props) {
               console.log('Auth success!');
               if (isLoginForm) {
                 toast.success("Welcome back! Successfully logged in.");
+                router.push("/home");
               } else {
                 toast.success("Account created! Please check your email for confirmation.");
+                router.push("/home");
               }
-              router.push("/");
             } else {
               // Handle case where neither success nor error message is present
               toast.error("Authentication failed. Please try again.");
