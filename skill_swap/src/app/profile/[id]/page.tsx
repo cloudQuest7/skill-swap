@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Badge } from '@/frontend/Components/ui/badge';
 import { Button } from '@/frontend/Components/ui/button';
+import { SkillSwapDialog } from '@/frontend/Components/SkillSwapDialog';
 
 interface ProfilePageProps {
   params: {
@@ -12,7 +13,14 @@ interface ProfilePageProps {
 }
 
 export default function ProfilePage({ params }: ProfilePageProps) {
-  // In a real app, fetch user data based on params.id
+  const [currentUserSkills, setCurrentUserSkills] = React.useState<string[]>([])
+  
+  React.useEffect(() => {
+    // In a real app, fetch current user's skills from API/auth context
+    setCurrentUserSkills(["JavaScript", "React", "Node.js"])
+  }, [])
+  
+  // In a real app, fetch profile data based on params.id
   const profile = {
     name: "Marc Demo",
     profileImage: "/placeholder-avatar.jpg",
@@ -52,9 +60,14 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                   <span className="text-muted-foreground dark:text-gray-400">Member since {profile.joinedDate}</span>
                 </div>
               </div>
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-primary/80 dark:hover:bg-primary/70 transition-colors">
-                Request Skill Swap
-              </Button>
+              <SkillSwapDialog 
+                userSkills={currentUserSkills}
+                targetSkills={profile.skillsOffered}
+                onRequestSent={() => {
+                  // Handle successful request
+                  console.log("Request sent successfully");
+                }}
+              />
             </div>
             
             <p className="text-muted-foreground dark:text-gray-400 mb-6">{profile.about}</p>
