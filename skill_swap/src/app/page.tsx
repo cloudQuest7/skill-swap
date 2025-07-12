@@ -127,7 +127,7 @@ export default function SkillSwapHero() {
 
       {/* Footer */}
       <footer className="bg-black text-white py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-7xl rounded-xl md:mx-8 lg:mx-16 xl:mx-32 shadow-lg">
           {/* Main Footer Content */}
           <div className="flex flex-col md:flex-row justify-between items-start gap-12">
             {/* Brand Section */}

@@ -52,3 +52,23 @@ export async function signUpAction(email: string, password: string): Promise<Aut
     return { errorMessage: "An unexpected error occurred" };
   }
 }
+
+export async function updateProfileAction(profile: any): Promise<UpdateProfileResponse> {
+  try {
+    const res = await fetch('/api/users/profile', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profile),
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      return { errorMessage: data.message || 'Failed to update profile' };
+    }
+    return { success: true };
+  } catch (error) {
+    return { errorMessage: 'An unexpected error occurred' };
+  }
+}

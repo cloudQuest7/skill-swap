@@ -18,5 +18,3 @@ router.put('/photo', protect, upload.single('profilePhoto'), updateProfilePhoto)
 router.put('/profile', protect, updateProfileInfo);
 
 module.exports = router;
-
-module.exports = router;

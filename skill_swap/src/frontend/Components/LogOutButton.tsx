@@ -29,7 +29,7 @@ function LogOutButton() {
       variant="outline"
       onClick={handleLogout}
       disabled={loading}
-      className="w-24"
+      className="w-24 hover:bg-red-600 hover:text-white transition-colors"
     >
       {loading ? <Loader2 className="animate-spin" /> : "Logout"}
     </Button>

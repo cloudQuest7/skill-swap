@@ -26,8 +26,19 @@ const updateProfilePhoto = async (req, res) => {
 // @access  Private
 const updateProfileInfo = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    // Convert the ID to a string if it's not already
+    // Debug logging
+    console.log('Updating profile for user:', req.user.id);
+    
+    const userId = req.user.id.toString();
+    const user = await User.findById(userId).exec();
+    if (!user) {
+      console.error('User not found:', userId);
+      return res.status(404).json({ 
+        message: 'User not found',
+        details: `Looking for user with ID: ${userId}`
+      });
+    }
 
     const {
       name,
