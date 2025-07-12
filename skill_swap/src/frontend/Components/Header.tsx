@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { DarkModeToggle } from "./DarkModeToggle";
+import { ThemeToggle } from "./ThemeToggle";
 import LogOutButton from "./LogOutButton";
 
 function Header() {
@@ -13,7 +13,7 @@ function Header() {
     >
       <Link className="flex flex-item gap-2" href="/">
         <Image
-          src="/napio.png"
+          src="/logo.png"
           height={50}
           width={50}
           alt="Logo"
@@ -25,7 +25,8 @@ function Header() {
         </h1>
       </Link>
 
-      <div className="flex gap-4">
+      <div className="flex items-center gap-4">
+        <ThemeToggle />
         {user ? (
         <LogOutButton/>
         ) : (
@@ -38,8 +39,6 @@ function Header() {
           </Button>
           </>
         )}
-
-        <DarkModeToggle />
       </div>
     </header>
   );

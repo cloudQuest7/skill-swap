@@ -6,8 +6,8 @@ import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
-import { Link, Loader2 } from 'lucide-react';
-import { start } from 'repl';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { loginAction, signUpAction } from '@/lib/actions/auth-actions';
 
 type Props = {
   type: 'login' | 'signup';
@@ -16,43 +16,46 @@ type Props = {
 function AuthForm({type}:Props) {
     const isLoginForm = type === 'login';
     const router = useRouter();
-
+    const [showPassword, setShowPassword] = React.useState(false);
     const [isPending, startTransition] = useTransition();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-       startTransition(async () => {
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-        let errorMessage;
-        let title;
-        let description;
-        if (isLoginForm) {
-          errorMessage = (await loginAction(email, password)).errorMessage;
-          title = "Logged in";
-            description = "You have successfully logged in.";
-        } else {
-          errorMessage = (await signUpAction(email, password)).errorMessage;
-          title = "Signed up";
-          description = "Check your Email for Comfirmation link.";
-        }
+        
+        startTransition(async () => {
+          try {
+            const email = formData.get('email') as string;
+            const password = formData.get('password') as string;
+            
+            console.log('Attempting auth with:', { email, type: isLoginForm ? 'login' : 'signup' });
+            
+            const response = isLoginForm 
+              ? await loginAction(email, password)
+              : await signUpAction(email, password);
 
-        if (errorMessage) {
-          toast({
-            title: "Action Failed",
-            description: errorMessage,
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title,
-            description,
-            variant: "success",
-          });
-          router.push("/");
-        }
-       });
+            if (response.errorMessage) {
+              console.log('Auth error:', response.errorMessage);
+              toast.error(response.errorMessage);
+              return;
+            }
+
+            if (response.success) {
+              console.log('Auth success!');
+              if (isLoginForm) {
+                toast.success("Welcome back! Successfully logged in.");
+              } else {
+                toast.success("Account created! Please check your email for confirmation.");
+              }
+              router.push("/");
+            } else {
+              // Handle case where neither success nor error message is present
+              toast.error("Authentication failed. Please try again.");
+            }
+          } catch (error) {
+            toast.error("An unexpected error occurred. Please try again.");
+          }
+        });
     };
   return (
     <form onSubmit={handleSubmit}>
@@ -70,15 +73,36 @@ function AuthForm({type}:Props) {
             </div>
 
             <div className='flex flex-col space-y-1.5'>
-                <Label htmlFor='email'>Password</Label>
-                <Input
-                id="password"
-                name='password'
-                placeholder="Enter your email"
-                type='password'
-                required
-                disabled={isPending}
-                />
+                <Label htmlFor='password'>Password</Label>
+                <div className="relative">
+                    <Input
+                        id="password"
+                        name='password'
+                        placeholder="Enter your password"
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        disabled={isPending}
+                        minLength={8}
+                        className="pr-10"
+                    />
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(prev => !prev)}
+                        disabled={isPending}
+                    >
+                        {showPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                        ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                        )}
+                        <span className="sr-only">
+                            {showPassword ? 'Hide password' : 'Show password'}
+                        </span>
+                    </Button>
+                </div>
             </div>
         </CardContent>
         <CardFooter className='mt-4 flex flex-col gap-6'>

@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const connectDB = async () => {
   try {
+
     // Add options for MongoDB Atlas connection
     const options = {
       useNewUrlParser: true,
