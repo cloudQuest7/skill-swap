@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const protect = (req, res, next) => {
   // Get the token from headers
@@ -26,6 +27,7 @@ const protect = (req, res, next) => {
 };
 
 module.exports = protect;
+module.exports = authMiddleware;
 
 // Add debug logging
 protect.debug = true;
