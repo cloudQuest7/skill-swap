@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const connectDB = require('./config/db');
-
+const feedbackRoutes = require('./routes/feedback');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
@@ -27,6 +27,8 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use("/api/requests", require("./routes/swap.js"));
 app.use('/api/users', userRoutes);
+app.use('/api/feedback', feedbackRoutes);
+
 
 // Test route
 app.get('/test', (req, res) => {
