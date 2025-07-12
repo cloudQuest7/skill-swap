@@ -1,26 +1,22 @@
 const express = require('express');
 const router = express.Router();
+
+// Middleware
 const upload = require('../middleware/uploadMiddleware');
 const protect = require('../middleware/authMiddleware');
-const User = require('../models/User');
 
-// GET user profile
-router.put('/photo', protect, upload.single('profilePhoto'), async (req, res) => {
-  try {
-    const user = await User.findById(req.user);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+// Controller
+const {
+  updateProfilePhoto,
+  updateProfileInfo,
+} = require('../controllers/userController');
 
-    user.profilePhoto = req.file.path;
-    await user.save();
+// @route   PUT /api/users/photo
+// @desc    Update profile photo
+// @access  Private
+router.put('/photo', protect, upload.single('profilePhoto'), updateProfilePhoto);
+router.put('/profile', protect, updateProfileInfo);
 
-    res.status(200).json({
-      message: 'Profile photo updated',
-      profilePhoto: req.file.path
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error updating photo' });
-  }
-});
+module.exports = router;
 
 module.exports = router;
