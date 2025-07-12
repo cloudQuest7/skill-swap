@@ -17,17 +17,20 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="flex min-h-screen flex-col">
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="pt-24"> {}
               {children}
-            </div>
-            
-            <Toaster />
-          </ThemeProvider>
+            </main>
+          </div>
+
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
