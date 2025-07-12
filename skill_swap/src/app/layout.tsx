@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import "@/app/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
-import Header from "@/Components/Header";
+import Header from "@/frontend/Components/Header";
 
 export const metadata: Metadata = {
-  title: "Nap.io",
+  title: "skill_swap",
 };
 
 export default function RootLayout({
