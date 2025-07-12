@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
-
+const feedbackRoutes = require('./routes/feedback');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
@@ -20,6 +20,8 @@ connectDB();
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/feedback', feedbackRoutes);
+
 
 // Test route
 app.get('/test', (req, res) => {
@@ -31,3 +33,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
