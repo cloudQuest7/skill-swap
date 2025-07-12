@@ -13,7 +13,7 @@ function Header() {
     >
       <Link className="flex flex-item gap-2" href="/">
         <Image
-          src="/napio.png"
+          src="/logo.png"
           height={50}
           width={50}
           alt="Logo"
