@@ -4,10 +4,14 @@ import { Button } from '@/frontend/Components/ui/button';
 import { Input } from '@/frontend/Components/ui/input';
 import { ArrowRight, Users, BookOpen, Star } from 'lucide-react';
 import { SkillProfiles } from '@/frontend/Components/SkillProfiles';
+import Header from '@/frontend/Components/Header';
 
 export default function SkillSwapHero() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 text-foreground">
+      <Header />
+      {/* Add padding for the fixed header */}
+      <div className="h-16"></div>
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 relative overflow-hidden">
         {/* Animated background elements */}
