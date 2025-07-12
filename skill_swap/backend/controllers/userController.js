@@ -26,6 +26,7 @@ const updateProfilePhoto = async (req, res) => {
 // @access  Private
 const updateProfileInfo = async (req, res) => {
   try {
+
     // Convert the ID to a string if it's not already
     // Debug logging
     console.log('Updating profile for user:', req.user.id);
@@ -39,6 +40,7 @@ const updateProfileInfo = async (req, res) => {
         details: `Looking for user with ID: ${userId}`
       });
     }
+
 
     const {
       name,
